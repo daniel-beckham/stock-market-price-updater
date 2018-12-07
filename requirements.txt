@@ -1,0 +1,9 @@
+alpha_vantage
+apscheduler
+flask
+flask-marshmallow
+flask-sqlalchemy
+marshmallow-sqlalchemy
+psycopg2
+psycopg2-binary
+sqlalchemy

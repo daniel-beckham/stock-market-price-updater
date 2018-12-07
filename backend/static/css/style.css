@@ -1,0 +1,49 @@
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  flex: 1 0 auto;
+}
+
+.ui.container.main {
+  padding-top: 3em;
+}
+
+.ui.container.footer {
+  padding-bottom: 1em;
+  padding-top: 1em;
+  text-align: center;
+}
+
+.ui.grid > .column:not(.row).menu {
+  padding-bottom: 0;
+}
+
+.ui.grid.masthead {
+  height: 40vh;
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ui.grid.masthead h1.ui.header {
+  font-size: 4em;
+  font-weight: bold;
+}
+
+.ui.grid.masthead h2.ui.header {
+  font-size: 1.5em;
+  font-weight: normal;
+}
+
+.ui.menu.main {
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+}
+
+@media (max-width: 768px) {
+  .ui.grid.masthead h1.ui.header {
+    font-size: 2.5rem;
+  }
+}

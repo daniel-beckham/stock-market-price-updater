@@ -1,0 +1,6 @@
+*.pyc
+.gcloudignore
+.git
+.gitignore
+__pycache__/
+frontend/
