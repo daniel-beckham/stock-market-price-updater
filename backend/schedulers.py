@@ -54,8 +54,8 @@ class UpdateScheduler:
     # Initialize the AlphaVantage API
     self.ts = TimeSeries(key=app.config['ALPHA_VANTAGE_API_KEY'])
 
-    # Start the scheduler
-    self.scheduler.add_job(self.update_all, 'cron', [app], hour=17, minute=30, timezone='America/New_York')
+    # Start the scheduler at 4:30 PM EST
+    self.scheduler.add_job(self.update_all, 'cron', [app], hour=16, minute=30, timezone='America/New_York')
     self.scheduler.start()
 
   def initialize_db(self, app):

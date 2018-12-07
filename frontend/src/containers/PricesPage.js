@@ -1,5 +1,4 @@
 import React from 'react';
-import { render } from 'react-dom';
 import { Link } from 'react-router-dom';
 import {
   Breadcrumb,
@@ -26,6 +25,11 @@ export default class PricesPage extends React.Component {
   }
 
   async componentDidMount() {
+    document.title = 'Latest Prices';
+    await this.fetchData();
+  }
+
+  async fetchData() {
     const stockData = await getJsonData('/stock-data/all/latest');
 
     this.setState({

@@ -1,5 +1,4 @@
 import React from 'react';
-import { render } from 'react-dom';
 import { Redirect, withRouter } from 'react-router';
 import {
   Breadcrumb,
@@ -7,7 +6,7 @@ import {
   Divider,
   Loader,
   Header,
-  Icon,
+  Icon
 } from 'semantic-ui-react';
 import Chart from '../components/StockChart';
 import getStockChartData from '../utils/getStockChartData';
@@ -28,12 +27,14 @@ class StockPage extends React.Component {
 
   async componentDidUpdate(prevProps) {
     if (this.props.location.pathname !== prevProps.location.pathname) {
+      document.title = this.props.match.params.symbol;
       this.setState(this.initialState);
       await this.fetchData();
     }
   }
 
   async componentDidMount() {
+    document.title = this.props.match.params.symbol;
     await this.fetchData();
   }
 
@@ -136,9 +137,10 @@ class StockPage extends React.Component {
             </p>
             <font color="grey">
               <Icon name="clock outline" />
-              As of{' '}
+              As of&nbsp;
               {new Date(
-                latestStockData.date + ' 5:00 PM EST'
+                /* 4:30 PM EST (9:30 PM UTC) */
+                latestStockData.date + 'T21:30:00'
               ).toLocaleDateString()}
             </font>
           </Container>
