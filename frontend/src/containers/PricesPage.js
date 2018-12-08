@@ -75,7 +75,9 @@ export default class PricesPage extends React.Component {
       <Container className="main" style={{ overflowX: 'auto' }}>
         {/* Breadcrumb */}
         <Breadcrumb>
-          <Breadcrumb.Section href="/">Home</Breadcrumb.Section>
+          <Breadcrumb.Section as={Link} to="/">
+            Home
+          </Breadcrumb.Section>
           <Breadcrumb.Divider />
           <Breadcrumb.Section active>Latest Prices</Breadcrumb.Section>
         </Breadcrumb>

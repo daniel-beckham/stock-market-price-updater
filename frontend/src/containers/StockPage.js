@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 import {
   Breadcrumb,
   Container,
@@ -65,14 +66,18 @@ class StockPage extends React.Component {
         <Container className="main">
           {/* Breadcrumb */}
           <Breadcrumb>
-            <Breadcrumb.Section href="/">Home</Breadcrumb.Section>
+            <Breadcrumb.Section as={Link} to="/">
+              Home
+            </Breadcrumb.Section>
             <Breadcrumb.Divider />
             {prevPath.search('/prices') !== -1 ? (
-              <Breadcrumb.Section href={'/prices'}>
+              <Breadcrumb.Section as={Link} to={'/prices'}>
                 Latest Prices
               </Breadcrumb.Section>
             ) : (
-              <Breadcrumb.Section href={'#'}>Search</Breadcrumb.Section>
+              <Breadcrumb.Section as={Link} to={'#'}>
+                Search
+              </Breadcrumb.Section>
             )}
             <Breadcrumb.Divider />
             <Breadcrumb.Section active>
