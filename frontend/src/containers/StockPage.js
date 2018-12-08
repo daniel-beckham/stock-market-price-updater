@@ -96,7 +96,13 @@ class StockPage extends React.Component {
             <p>
               {/* Last price */}
               <span style={{ fontSize: '2em' }}>
-                <strong>{latestStockData.close}&nbsp;&nbsp;</strong>
+                <strong>
+                  {latestStockData.close.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 2
+                  })}
+                </strong>
+                &nbsp;
               </span>
 
               {/* Change */}
@@ -110,7 +116,10 @@ class StockPage extends React.Component {
                       : 'grey'
                   }
                 >
-                  {latestStockData.change.toFixed(2)}
+                  {latestStockData.change.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 2
+                  })}
                 </font>
                 &nbsp;
                 {/* Percent change */}
@@ -123,7 +132,12 @@ class StockPage extends React.Component {
                       : 'grey'
                   }
                 >
-                  ({latestStockData.percent_change.toFixed(2)}%)&nbsp;
+                  (
+                  {latestStockData.percent_change.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 2
+                  })}
+                  %)&nbsp;
                 </font>
                 {/* Arrow icon */}
                 {latestStockData.change < 0 ? (

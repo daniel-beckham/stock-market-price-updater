@@ -51,7 +51,7 @@ export default class HomePage extends React.Component {
               </Grid.Column>
               <Grid.Column>
                 <Header as="h1" color="grey">
-                  Stock market forecasts
+                  Stock market prices and history
                 </Header>
                 <Header as="h1" color="grey">
                   <Header.Subheader>

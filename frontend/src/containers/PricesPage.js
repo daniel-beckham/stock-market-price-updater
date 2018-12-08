@@ -171,6 +171,7 @@ export default class PricesPage extends React.Component {
                   key={`${data.symbol}-${data.close}-close`}
                 >
                   {data.close.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
                     minimumFractionDigits: 2
                   })}
                 </Table.Cell>
@@ -189,7 +190,10 @@ export default class PricesPage extends React.Component {
                         : 'grey'
                     }
                   >
-                    {data.change.toFixed(2)}
+                    {data.change.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 2
+                    })}
                   </font>
 
                   {/* Arrow icon */}
@@ -216,7 +220,11 @@ export default class PricesPage extends React.Component {
                         : 'grey'
                     }
                   >
-                    {data.percent_change.toFixed(2)}%
+                    {data.percent_change.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 2
+                    })}
+                    %
                   </font>
                 </Table.Cell>
 
