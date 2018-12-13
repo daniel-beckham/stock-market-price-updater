@@ -3,6 +3,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from collections import OrderedDict
 from datetime import datetime, timedelta
 from os import getenv
+from pytz import timezone
 
 from backend.models import db, StockData, StockInfo, StockDataSchema
 
@@ -57,6 +58,13 @@ class UpdateScheduler:
     # Start the scheduler at 4:30 PM EST
     self.scheduler.add_job(self.update_all, 'cron', [app], hour=16, minute=30, timezone='America/New_York')
     self.scheduler.start()
+
+    # Get the current time
+    current_time = datetime.now(timezone('America/New_York'))
+
+    # Start an update now if the current time is before 8:30 AM EST or after 4:30 PM EST
+    if (current_time.hour <= 8 and current_time.minute < 30) or (current_time.hour >= 16 and current_time.minute > 30):
+      self.update_all(app)
 
   def initialize_db(self, app):
     with app.app_context():
