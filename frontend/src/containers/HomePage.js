@@ -44,22 +44,45 @@ export default class HomePage extends React.Component {
 
         {/* Content */}
         <Container className="main">
+          {/* Information panel #1 */}
           <Grid verticalAlign="middle" columns={2}>
             <Grid.Row>
               <Grid.Column align="center">
-                <Image src="/static/img/analytics.svg" size="large" />
+                <Image src="/static/img/analytics-1.svg" size="large" />
               </Grid.Column>
               <Grid.Column>
                 <Header as="h1" color="grey">
-                  Stock market prices and history
+                  Stock market prices
                 </Header>
                 <Header as="h1" color="grey">
                   <Header.Subheader>
-                    Stock prices are updated daily, and we have two years of
-                    historical data along with an interactive chart for each
-                    stock.
+                    Prices for stocks in the Dow Jones Industrial Average are
+                    updated each day after the New York Stock Exchange closes.
                   </Header.Subheader>
                 </Header>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+
+          <Divider hidden />
+
+          {/* Information panel #2 */}
+          <Grid verticalAlign="middle" columns={2}>
+            <Grid.Row>
+              <Grid.Column>
+                <Header as="h1" color="grey">
+                  Stock market history
+                </Header>
+                <Header as="h1" color="grey">
+                  <Header.Subheader>
+                    An interactive chart with two years of historical data can
+                    be viewed for each stock. Technical indicators are also
+                    available.
+                  </Header.Subheader>
+                </Header>
+              </Grid.Column>
+              <Grid.Column align="center">
+                <Image src="/static/img/analytics-2.svg" size="large" />
               </Grid.Column>
             </Grid.Row>
           </Grid>
