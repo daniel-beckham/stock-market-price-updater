@@ -18,7 +18,7 @@ postgres = {
   'host': app.config['POSTGRES_HOST'],
   'port': app.config['POSTGRES_PORT'],
   'database': app.config['POSTGRES_DATABASE'],
-  'instance': app.config['POSTGRES_INSTANCE']
+  'instance': app.config.get('POSTGRES_INSTANCE', '')
 }
 
 # Connect to the database
@@ -42,7 +42,6 @@ app.register_blueprint(general)
 app.register_blueprint(stock_data_api)
 app.register_blueprint(stock_info_api)
 
-# Create the update scheduler if the app is deployed
-if getenv('GOOGLE_CLOUD_PROJECT', '') is not '':
-  update_scheduler = UpdateScheduler()
-  update_scheduler.create(app)
+# Create the update scheduler
+update_scheduler = UpdateScheduler()
+update_scheduler.create(app)
