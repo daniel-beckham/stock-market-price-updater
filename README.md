@@ -48,7 +48,7 @@ This app is separated into two components: the front end (Flask) and the back en
 * Deploy the app.
 
 ### AWS Elastic Beanstalk
-* On the AWS Console, create a new Elastic Beanstalk web server environment. Choose Python as the preconfigured platform, and add an Amazon RDS PostgreSQL database to the environment.
+* On the AWS Management Console, create a new Elastic Beanstalk web server environment. Choose Python as the preconfigured platform, and add an Amazon RDS PostgreSQL database to the environment.
 * Go to Configuration and then Software. Under Container Options, change WSGIPath to `main.py`. Under Static Files, add a field for `/static/` (Path) and `backend/static/` (Directory).
 * Create a `config.py` file in the `backend` directory with the following contents:
   ```
