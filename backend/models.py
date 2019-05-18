@@ -8,9 +8,8 @@ ma = Marshmallow()
 # Stock data model
 class StockData(db.Model):
   __tablename__ = 'stock_data'
-  id = db.Column('id', db.Integer, primary_key=True)
-  symbol = db.Column('symbol', db.String)
-  date = db.Column('date', db.Date)
+  symbol = db.Column('symbol', db.String, primary_key=True)
+  date = db.Column('date', db.Date, primary_key=True)
   open = db.Column('open', db.Float)
   high = db.Column('high', db.Float)
   low = db.Column('low', db.Float)

@@ -28,7 +28,7 @@ def stock_data_symbol(symbol):
   stock_data_query = (StockData.query
     .filter(StockData.symbol == symbol)
     .order_by(StockData.date.desc()))
-  stock_data_schema = StockDataSchema(many=True, exclude=(['symbol', 'id']))
+  stock_data_schema = StockDataSchema(many=True, exclude=(['symbol']))
   stock_data_dump = stock_data_schema.dump(stock_data_query).data
 
   # Put the name of the stock alongside the data in the output
@@ -47,7 +47,7 @@ def stock_data_symbol_latest(symbol):
     .order_by(StockData.date.desc())
     .limit(2)
     .all())
-  stock_data_schema = StockDataSchema(many=True, exclude=(['symbol', 'id']))
+  stock_data_schema = StockDataSchema(many=True, exclude=(['symbol']))
   stock_data_dump = stock_data_schema.dump(stock_data_query).data
 
   output = {}
@@ -78,7 +78,7 @@ def stock_data_all_latest():
   stock_data_query = (db.session
     .query(stock_data_subquery)
     .filter(stock_data_subquery.c.n <= 2))
-  stock_data_schema = StockDataSchema(many=True, exclude=(['id']))
+  stock_data_schema = StockDataSchema(many=True)
   stock_data_dump = stock_data_schema.dump(stock_data_query).data
 
   # Get all of the symbols and names

@@ -55,15 +55,15 @@ class UpdateScheduler:
     # Initialize the AlphaVantage API
     self.ts = TimeSeries(key=app.config['ALPHA_VANTAGE_API_KEY'])
 
-    # Start the scheduler at 4:30 PM EST
-    self.scheduler.add_job(self.update_all, 'cron', [app], hour=16, minute=30, timezone='America/New_York')
+    # Start the scheduler at 5:00 PM EST
+    self.scheduler.add_job(self.update_all, 'cron', [app], hour=17, minute=00, timezone='America/New_York')
     self.scheduler.start()
 
     # Get the current time
     current_time = datetime.now(timezone('America/New_York'))
 
-    # Start an update now if the current time is before 8:30 AM EST or after 4:30 PM EST
-    if (current_time.hour <= 8 and current_time.minute < 30) or (current_time.hour >= 16 and current_time.minute > 30):
+    # Start an update now if the current time is at least 5:00 PM EST but not yet 8:00 AM EST
+    if (current_time.hour >= 17) or (current_time.hour < 8):
       self.update_all(app)
 
   def initialize_db(self, app):
