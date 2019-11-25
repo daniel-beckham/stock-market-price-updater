@@ -2,8 +2,8 @@ from flask import Blueprint, jsonify, render_template, request, send_from_direct
 from os import path
 from sqlalchemy import desc, or_
 
-from backend.models import db, StockData, StockDataSchema, StockInfo, StockInfoSchema
-from backend.utils import get_all_stock_info, get_stock_name
+from package.models import db, StockData, StockDataSchema, StockInfo, StockInfoSchema
+from package.utils import get_all_stock_info, get_stock_name
 
 # General routes
 
@@ -29,7 +29,7 @@ def stock_data_symbol(symbol):
     .filter(StockData.symbol == symbol)
     .order_by(StockData.date.desc()))
   stock_data_schema = StockDataSchema(many=True, exclude=(['symbol']))
-  stock_data_dump = stock_data_schema.dump(stock_data_query).data
+  stock_data_dump = stock_data_schema.dump(stock_data_query)
 
   # Put the name of the stock alongside the data in the output
   output = {
@@ -48,20 +48,24 @@ def stock_data_symbol_latest(symbol):
     .limit(2)
     .all())
   stock_data_schema = StockDataSchema(many=True, exclude=(['symbol']))
-  stock_data_dump = stock_data_schema.dump(stock_data_query).data
+  stock_data_dump = stock_data_schema.dump(stock_data_query)
 
   output = {}
 
   # Check if the stock has two days of data
   if len(stock_data_dump) == 2:
-    # Calculate the change and percent change for the stock
+    # Calculate the change for the stock
     stock_data_dump[0]['change'] = round(stock_data_dump[0]['close'] - stock_data_dump[1]['close'], 2)
-    stock_data_dump[0]['percent_change'] = round((stock_data_dump[0]['change'] / stock_data_dump[1]['close']) * 100, 2)
 
-    # Get the name of the stock and include it in the output
+    # Calculate the percent change for the stock
+    if stock_data_dump[1]['close'] > 0.0:
+      stock_data_dump[0]['percent_change'] = round((stock_data_dump[0]['change'] / stock_data_dump[1]['close']) * 100, 2)
+    else:
+      stock_data_dump[0]['percent_change'] = 0.0
+
     stock_data_dump[0]['name'] = get_stock_name(symbol)
 
-    # Only include the latest day with the above calculations in the output
+    # Only include the latest day in the output
     output = stock_data_dump[0]
 
   return jsonify(output)
@@ -79,7 +83,7 @@ def stock_data_all_latest():
     .query(stock_data_subquery)
     .filter(stock_data_subquery.c.n <= 2))
   stock_data_schema = StockDataSchema(many=True)
-  stock_data_dump = stock_data_schema.dump(stock_data_query).data
+  stock_data_dump = stock_data_schema.dump(stock_data_query)
 
   # Get all of the symbols and names
   stock_info = get_all_stock_info()
@@ -96,12 +100,18 @@ def stock_data_all_latest():
 
     # Check if the grouped stock has two days of data
     if len(pair) == 2:
-      # Calculate the change and percent change for the stock
+      # Calculate the change for the stock
       pair[0]['change'] = round(pair[0]['close'] - pair[1]['close'], 2)
-      pair[0]['percent_change'] = round((pair[0]['change'] / pair[1]['close']) * 100, 2)
+
+      # Calculate the percent change for the stock
+      if pair[1]['close'] > 0.0:
+        pair[0]['percent_change'] = round((pair[0]['change'] / pair[1]['close']) * 100, 2)
+      else:
+        pair[0]['percent_change'] = 0.0
+
       pair[0]['name'] = stock_info[object['symbol']]
 
-      # Only include the latest day with the above calculations in the output
+      # Only include the latest day in the output
       final_output.append(pair[0])
 
   return jsonify(final_output)
@@ -124,7 +134,7 @@ def stock_info_search():
     db.func.lower(StockInfo.name).like(db.func.lower('%{}%'.format(query)))
   ))
   stock_info_schema = StockInfoSchema(many=True)
-  stock_info_dump = stock_info_schema.dump(stock_info_query).data
+  stock_info_dump = stock_info_schema.dump(stock_info_query)
 
   output = {}
   output['results'] = []

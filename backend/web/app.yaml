@@ -1,8 +1,8 @@
-runtime: python37
+runtime: python38
 
 handlers:
 - url: /static
-  static_dir: backend/static
+  static_dir: package/static
 
 - url: /.*
   script: auto

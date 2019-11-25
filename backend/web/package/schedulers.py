@@ -1,13 +1,14 @@
 from alpha_vantage.timeseries import TimeSeries
-from apscheduler.schedulers.background import BackgroundScheduler
 from collections import OrderedDict
 from datetime import datetime, timedelta
+from flask_apscheduler import APScheduler
 from os import getenv
 from pytz import timezone
 
-from backend.models import db, StockData, StockInfo, StockDataSchema
+from package.models import db, StockData, StockInfo, StockDataSchema
 
-class UpdateScheduler:
+class UpdateScheduler():
+  
   max_days_per_stock = 730
   update_interval = 20
 
@@ -20,7 +21,7 @@ class UpdateScheduler:
     ('CVX', 'Chevron Corporation'),
     ('DIS', 'The Walt Disney Company'),
     ('DJI', 'Dow Jones Industrial Average'),
-    ('DWDP', 'DowDuPont Inc.'),
+    ('DOW', 'Dow Inc.'),
     ('GS', 'The Goldman Sachs Group, Inc.'),
     ('HD', 'The Home Depot, Inc.'),
     ('IBM', 'International Business Machines Corporation'),
@@ -45,29 +46,35 @@ class UpdateScheduler:
     ('XOM', 'Exxon Mobil Corporation')
   ]
 
-  scheduler = BackgroundScheduler(daemon=True)
+  scheduler = APScheduler()
   ts = None
 
-  def create(self, app):
+  def create(self):
+    with db.app.app_context():
     # Initialize the database
-    self.initialize_db(app)
+      self.initialize_db()
 
-    # Initialize the AlphaVantage API
-    self.ts = TimeSeries(key=app.config['ALPHA_VANTAGE_API_KEY'])
+      # Initialize the scheduler
+      self.scheduler.init_app(db.app)
 
-    # Start the scheduler at 5:00 PM EST
-    self.scheduler.add_job(self.update_all, 'cron', [app], hour=17, minute=00, timezone='America/New_York')
+      # Initialize the AlphaVantage API
+      self.ts = TimeSeries(key=db.app.config['ALPHA_VANTAGE_API_KEY'])
+
+      # Add a job to start the update at 5:00 PM EST daily
+      self.scheduler.add_job(id='main_job', func=self.update_all, trigger='cron', hour=17, minute=00, timezone='America/New_York')
+
+      # Get the current time
+      current_time = datetime.now(timezone('America/New_York'))
+
+      # Start the update now if the current time is at least 5:00 PM EST but not yet 8:00 AM EST
+      if (current_time.hour >= 17) or (current_time.hour < 8):
+        self.update_all()
+    
+    # Start the scheduler
     self.scheduler.start()
 
-    # Get the current time
-    current_time = datetime.now(timezone('America/New_York'))
-
-    # Start an update now if the current time is at least 5:00 PM EST but not yet 8:00 AM EST
-    if (current_time.hour >= 17) or (current_time.hour < 8):
-      self.update_all(app)
-
-  def initialize_db(self, app):
-    with app.app_context():
+  def initialize_db(self):
+    with db.app.app_context():
       # Create the tables
       db.create_all()
 
@@ -78,14 +85,15 @@ class UpdateScheduler:
             db.session.add(StockInfo(symbol=stock[0], name=stock[1]))
             db.session.commit()
 
-  def update_all(self, app):
+  def update_all(self):
     # Update all of the stocks in set intervals
     for index, stock in enumerate(self.stocks, start=1):
       next_update_time = datetime.now() + timedelta(seconds=self.update_interval * index)
-      self.scheduler.add_job(self.update_stock, 'date', [app, stock], run_date=next_update_time)
+      self.scheduler.add_job(id=stock[0] + '_job', func=self.update_stock, trigger='date', args=[stock], run_date=next_update_time)
 
-  def update_stock(self, app, stock):
-    with app.app_context():
+  def update_stock(self, stock):
+    with db.app.app_context():
+
       # Get the stock data from Alpha Vantage and sort it by date
       alpha_vantage_data = OrderedDict(sorted(self.ts.get_daily(stock[0], outputsize='full')[0].items(), reverse=True))
       oldest_date = (datetime.now() - timedelta(days=self.max_days_per_stock)).strftime('%Y-%m-%d')

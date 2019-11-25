@@ -1,6 +1,5 @@
 *.pyc
 __pycache__/
-backend/config.py
-backend/static/index.html
-backend/static/js/
+backend/web/package/static/index.html
+backend/web/package/static/js/
 frontend/node_modules/

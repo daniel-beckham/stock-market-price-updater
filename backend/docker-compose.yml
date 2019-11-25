@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+  db:
+    env_file: .env
+    image: postgres:12-alpine
+    ports:
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+    restart: unless-stopped
+    volumes:
+      - db_volume:/var/lib/postgresql/data/
+  db_dependency:
+    command: ${POSTGRES_HOST}:${POSTGRES_PORT}
+    depends_on:
+      - db
+    image: dadarek/wait-for-dependencies
+  nginx:
+    build: ./nginx
+    depends_on:
+      - web
+    ports:
+      - '80:80'
+    restart: unless-stopped
+    volumes:
+      - static_volume:/app/package/static
+  web:
+    build: ./web
+    command: gunicorn --bind 0.0.0.0:5000 main:app
+    depends_on:
+      - db_dependency
+    env_file: .env
+    expose:
+      - '5000'
+    restart: unless-stopped
+    volumes:
+      - static_volume:/app/package/static
+
+volumes:
+  db_volume:
+  static_volume:

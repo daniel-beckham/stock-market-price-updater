@@ -1,10 +1,10 @@
-from backend.models import db, StockData, StockDataSchema, StockInfo, StockInfoSchema
+from package.models import db, StockData, StockDataSchema, StockInfo, StockInfoSchema
 
 def get_all_stock_info():
   # Get all of the symbols and names
   stock_info_query = StockInfo.query.all()
   stock_info_schema = StockInfoSchema(many=True)
-  stock_info_dump = stock_info_schema.dump(stock_info_query).data
+  stock_info_dump = stock_info_schema.dump(stock_info_query)
 
   output = {}
 

@@ -1,22 +1,11 @@
 # Stock Market Price Updater
-### [Live Demo](http://stock-market-price-updater.us-east-2.elasticbeanstalk.com/)
 
 This is a web app that retrieves daily stock prices and also allows two years of historical data to be viewed for each stock. It is powered by Flask and React and uses the [Alpha Vantage](https://www.alphavantage.co/) API to store the stock prices in a PostgreSQL database.
 
 ## Instructions
-This app is separated into two components: the front end (Flask) and the back end (React). It is also configured for use on both Google App Engine and AWS Elastic Beanstalk. Follow the instructions below in order to use and deploy it.
+This app is separated into two components: the front end (Flask) and the back end (React). The back end is configured primarily for use with Docker Compose, but there are also instructions for deploying it on both Google App Engine and AWS Elastic Beanstalk.
 
-### Back End
-* Create and activate a virtualenv, and then install the requirements:
-  ```
-  python -m pip install -r requirements.txt
-  ```
-* Start the Flask server:
-  ```
-  python main.py
-  ```
-
-### Front End
+## Front End
 * Navigate to the front end directory (`cd frontend`). 
 * Install the dependencies:
   ```
@@ -26,21 +15,32 @@ This app is separated into two components: the front end (Flask) and the back en
   ```
   npm run start
   ```
-* To see the latest version of the page, open http://localhost:8081 in a browser window. Note that some pages pages will not be operational until the database is created and the app is deployed for the first time.
-* When ready to deploy, create the production build:
+* The app can be viewed at http://localhost:5001. Note that some pages will not be operational until the back end has fully populated the database.
+* Create the production build so that the static files can be served by the back end:
   ```
   npm run build
   ```
 
+## Back End
+### Docker Compose
+* Navigate to the back end directory (`cd backend`).
+* Supply the correct database and Alpha Vantage information in the `.env` file.
+* Configure, build, and start the app:
+  ```
+  docker-compose up
+  ```
+* The app can be viewed at http://localhost:80 (or wherever it has been hosted) once the database has been populated.
+
 ### Google App Engine
 * On the Google Cloud Platform Console, create a Cloud SQL PostgreSQL instance.
-* Create a `config.py` file in the `backend` directory with the following contents:
+* Navigate to the back end directory containing the Flask files (`cd backend/web`).
+* Replace the contents of the `config.py` file in the `package` directory with the following:
   ```
-  POSTGRES_USERNAME = 'username'
+  POSTGRES_USER = 'username'
   POSTGRES_PASSWORD = 'password'
   POSTGRES_HOST = 'host'
   POSTGRES_PORT = port
-  POSTGRES_DATABASE = 'database'
+  POSTGRES_DB = 'database'
   POSTGRES_INSTANCE = 'project:region:instance'
   ALPHA_VANTAGE_API_KEY = 'key'
   ```
@@ -49,17 +49,32 @@ This app is separated into two components: the front end (Flask) and the back en
 
 ### AWS Elastic Beanstalk
 * On the AWS Management Console, create a new Elastic Beanstalk web server environment. Choose Python as the preconfigured platform, and add an Amazon RDS PostgreSQL database to the environment.
-* Go to Configuration and then Software. Under Container Options, change WSGIPath to `main.py`. Under Static Files, add a field for `/static/` (Path) and `backend/static/` (Directory).
-* Create a `config.py` file in the `backend` directory with the following contents:
+* Go to Configuration and then Software. Under Container Options, change WSGIPath to `main.py`. Under Static Files, add a field for `/static/` (Path) and `package/static/` (Directory).
+* Navigate to the back end directory containing the Flask files (`cd backend/web`).
+* Replace the contents of the `config.py` file in the `package` directory with the following:
   ```
   import os
 
-  POSTGRES_USERNAME = os.environ['RDS_USERNAME']
+  POSTGRES_USER = os.environ['RDS_USERNAME']
   POSTGRES_PASSWORD = os.environ['RDS_PASSWORD']
   POSTGRES_HOST = os.environ['RDS_HOSTNAME']
   POSTGRES_PORT = os.environ['RDS_PORT']
-  POSTGRES_DATABASE = os.environ['RDS_DB_NAME']
+  POSTGRES_DB = os.environ['RDS_DB_NAME']
   ALPHA_VANTAGE_API_KEY = 'key'
   ```
   Edit the value corresponding to the Alpha Vantage API key.
 * Deploy the app.
+
+### Manual Configuration
+* Navigate to the back end directory containing the Flask files (`cd backend/web`).
+* Create and activate a virtualenv, and then install the requirements:
+  ```
+  python -m pip install -r requirements.txt
+  ```
+* Install and configure PostgreSQL.
+* Supply the correct database and Alpha Vantage information in the `config.py` file in the `package` directory.
+* Start the Flask server:
+  ```
+  python main.py
+  ```
+* The app can be viewed at http://localhost:5000 (or wherever it has been hosted) once the database has been populated.
