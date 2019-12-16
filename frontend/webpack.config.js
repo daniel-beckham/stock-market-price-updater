@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const path = require('path');
@@ -27,10 +27,7 @@ module.exports = {
     chunkFilename: isDevServer ? '[name].bundle.js' : '[name].bundle.[contenthash].js'
   },
   plugins: [
-    new CleanWebpackPlugin(['../backend/web/package/static/js/*.js'], {
-      root: path.resolve(__dirname, '../backend/web/package'),
-      watch: true
-    }),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       alwaysWriteToDisk: true,
       filename: path.resolve(__dirname, '../backend/web/package/static/index.html'),

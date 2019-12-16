@@ -1,3 +1,5 @@
+# Google App Engine Configuration File
+
 runtime: python38
 
 handlers:

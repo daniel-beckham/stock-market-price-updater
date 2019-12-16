@@ -21,8 +21,6 @@ services:
     ports:
       - '80:80'
     restart: unless-stopped
-    volumes:
-      - static_volume:/app/package/static
   web:
     build: ./web
     command: gunicorn --bind 0.0.0.0:5000 main:app
@@ -32,9 +30,6 @@ services:
     expose:
       - '5000'
     restart: unless-stopped
-    volumes:
-      - static_volume:/app/package/static
 
 volumes:
   db_volume:
-  static_volume:

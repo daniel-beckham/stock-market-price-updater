@@ -1,4 +1,5 @@
 # Stock Market Price Updater
+### [Live Demo](https://danielbeckham.com/stock-market-price-updater)
 
 This is a web app that retrieves daily stock prices and also allows two years of historical data to be viewed for each stock. It is powered by Flask and React and uses the [Alpha Vantage](https://www.alphavantage.co/) API to store the stock prices in a PostgreSQL database.
 
@@ -11,11 +12,6 @@ This app is separated into two components: the front end (Flask) and the back en
   ```
   npm install
   ```
-* Start the Webpack Dev Server:
-  ```
-  npm run start
-  ```
-* The app can be viewed at http://localhost:5001. Note that some pages will not be operational until the back end has fully populated the database.
 * Create the production build so that the static files can be served by the back end:
   ```
   npm run build
@@ -29,7 +25,6 @@ This app is separated into two components: the front end (Flask) and the back en
   ```
   docker-compose up
   ```
-* The app can be viewed at http://localhost:80 (or wherever it has been hosted) once the database has been populated.
 
 ### Google App Engine
 * On the Google Cloud Platform Console, create a Cloud SQL PostgreSQL instance.
@@ -77,4 +72,3 @@ This app is separated into two components: the front end (Flask) and the back en
   ```
   python main.py
   ```
-* The app can be viewed at http://localhost:5000 (or wherever it has been hosted) once the database has been populated.
