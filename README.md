@@ -3,7 +3,6 @@
 
 This is a web app that retrieves daily stock prices and also allows two years of historical data to be viewed for each stock. It is powered by Flask and React and uses the [Alpha Vantage](https://www.alphavantage.co/) API to store the stock prices in a PostgreSQL database.
 
-## Instructions
 This app is separated into two components: the front end (Flask) and the back end (React). The back end is configured primarily for use with Docker Compose, but there are also instructions for deploying it on both Google App Engine and AWS Elastic Beanstalk.
 
 ## Front End
