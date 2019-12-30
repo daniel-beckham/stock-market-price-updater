@@ -2,7 +2,7 @@ import { timeParse } from 'd3-time-format';
 import getJsonData from './getJsonData';
 
 export default function getStockChartData(symbol) {
-  const result = getJsonData('/stock-data/' + symbol)
+  const result = getJsonData(`${process.env.SUBDIRECTORY}/stock-data/${symbol}`)
     .then(response => {
       let chartArray = [];
 

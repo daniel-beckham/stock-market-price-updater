@@ -6,10 +6,12 @@ class NavigationMenu extends React.Component {
   componentDidMount() {
     $('.ui.search').search({
       apiSettings: {
-        url: '/stock-info/filter?q={query}'
+        url: `${process.env.SUBDIRECTORY}/stock-info/filter?q={query}`
       },
       onSelect: (result, response) => {
-        this.props.history.push('/stocks/' + result.title);
+        this.props.history.push(
+          `${process.env.SUBDIRECTORY}/stocks/${result.title}`
+        );
       }
     });
   }
@@ -17,10 +19,10 @@ class NavigationMenu extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Menu.Item as={NavLink} exact to="/">
+        <Menu.Item as={NavLink} exact to={`${process.env.SUBDIRECTORY}`}>
           Home
         </Menu.Item>
-        <Menu.Item as={NavLink} exact to="/prices">
+        <Menu.Item as={NavLink} exact to={`${process.env.SUBDIRECTORY}/prices`}>
           Latest Prices
         </Menu.Item>
         <Menu.Item

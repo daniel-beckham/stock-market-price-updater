@@ -35,7 +35,12 @@ export default class HomePage extends React.Component {
                 Updater
               </Header>
               <Divider hidden />
-              <Button as={Link} to="/prices" size="huge" inverted>
+              <Button
+                as={Link}
+                to={`${process.env.SUBDIRECTORY}/prices`}
+                size="huge"
+                inverted
+              >
                 Get started
               </Button>
             </Grid.Column>
@@ -48,7 +53,10 @@ export default class HomePage extends React.Component {
           <Grid verticalAlign="middle" columns={2}>
             <Grid.Row>
               <Grid.Column align="center">
-                <Image src="/static/img/analytics-1.svg" size="large" />
+                <Image
+                  src={`${process.env.SUBDIRECTORY}/static/img/analytics-1.svg`}
+                  size="large"
+                />
               </Grid.Column>
               <Grid.Column>
                 <Header as="h1" color="grey">
@@ -82,7 +90,10 @@ export default class HomePage extends React.Component {
                 </Header>
               </Grid.Column>
               <Grid.Column align="center">
-                <Image src="/static/img/analytics-2.svg" size="large" />
+                <Image
+                  src={`${process.env.SUBDIRECTORY}/static/img/analytics-2.svg`}
+                  size="large"
+                />
               </Grid.Column>
             </Grid.Row>
           </Grid>

@@ -30,7 +30,9 @@ export default class PricesPage extends React.Component {
   }
 
   async fetchData() {
-    const stockData = await getJsonData('/stock-data/all/latest');
+    const stockData = await getJsonData(
+      `${process.env.SUBDIRECTORY}/stock-data/all/latest`
+    );
 
     this.setState({
       stockData: _.sortBy(stockData, [this.state.sortColumn]),
@@ -75,7 +77,7 @@ export default class PricesPage extends React.Component {
       <Container className="main" style={{ overflowX: 'auto' }}>
         {/* Breadcrumb */}
         <Breadcrumb>
-          <Breadcrumb.Section as={Link} to="/">
+          <Breadcrumb.Section as={Link} to={`${process.env.SUBDIRECTORY}`}>
             Home
           </Breadcrumb.Section>
           <Breadcrumb.Divider />
@@ -156,7 +158,7 @@ export default class PricesPage extends React.Component {
                 <Table.Cell key={data.symbol}>
                   <Link
                     to={{
-                      pathname: '/stocks/' + data.symbol,
+                      pathname: `${process.env.SUBDIRECTORY}/stocks/${data.symbol}`,
                       state: { prevPath: this.props.location.pathname }
                     }}
                   >

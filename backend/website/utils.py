@@ -1,4 +1,4 @@
-from package.models import db, StockData, StockDataSchema, StockInfo, StockInfoSchema
+from website.models import db, StockData, StockDataSchema, StockInfo, StockInfoSchema
 
 def get_all_stock_info():
   # Get all of the symbols and names
@@ -19,4 +19,4 @@ def get_stock_name(symbol):
     .query(StockInfo.name)
     .filter(StockInfo.symbol == symbol)
     .first())
-  return stock_name[0]
+  return stock_name[0] if stock_name else ''

@@ -2,8 +2,8 @@ from flask import Blueprint, jsonify, render_template, request, send_from_direct
 from os import path
 from sqlalchemy import desc, or_
 
-from package.models import db, StockData, StockDataSchema, StockInfo, StockInfoSchema
-from package.utils import get_all_stock_info, get_stock_name
+from website.models import db, StockData, StockDataSchema, StockInfo, StockInfoSchema
+from website.utils import get_all_stock_info, get_stock_name
 
 # General routes
 

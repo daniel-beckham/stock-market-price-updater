@@ -46,7 +46,7 @@ export default class SiteHeader extends React.Component {
                   </Button>
                 </Menu.Item>
 
-                <Menu.Item header as={Link} to="/">
+                <Menu.Item header as={Link} to={`${process.env.SUBDIRECTORY}`}>
                   Stock Market Price Updater
                 </Menu.Item>
 

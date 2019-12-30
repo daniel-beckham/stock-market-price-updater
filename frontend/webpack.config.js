@@ -1,10 +1,11 @@
 const webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 
-const isDevServer = process.argv.find(v => v.includes('webpack-dev-server'));
+const mode = process.argv[process.argv.indexOf('--mode') + 1] || 'development';
+const subdirectory = process.env.SUBDIRECTORY || '';
 
 module.exports = {
   entry: ['./src/index.js'],
@@ -17,23 +18,39 @@ module.exports = {
       }
     ]
   },
+  output: {
+    path: path.resolve(__dirname, '../backend/website/static/js'),
+    publicPath: subdirectory + '/static/js/',
+    filename:
+      mode === 'development'
+        ? '[name].bundle.js'
+        : '[name].bundle.[contenthash].js',
+    chunkFilename:
+      mode === 'development'
+        ? '[name].bundle.js'
+        : '[name].bundle.[contenthash].js'
+  },
   resolve: {
     extensions: ['*', '.js', '.jsx']
   },
-  output: {
-    path: path.resolve(__dirname, '../backend/web/package/static/js'),
-    publicPath: '/static/js/',
-    filename: isDevServer ? '[name].bundle.js' : '[name].bundle.[contenthash].js',
-    chunkFilename: isDevServer ? '[name].bundle.js' : '[name].bundle.[contenthash].js'
-  },
   plugins: [
-    new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      alwaysWriteToDisk: true,
-      filename: path.resolve(__dirname, '../backend/web/package/static/index.html'),
-      template: path.resolve(__dirname, '../backend/web/package/templates/index.html')
+    new webpack.EnvironmentPlugin({
+      SUBDIRECTORY: ''
     }),
-    new HtmlWebpackHarddiskPlugin()
+    new HtmlWebpackPlugin({
+      filename: path.resolve(
+        __dirname,
+        '../backend/website/static/index.html'
+      ),
+      template: path.resolve(
+        __dirname,
+        '../backend/website/templates/index.html'
+      ),
+      inject: false,
+      alwaysWriteToDisk: true
+    }),
+    new HtmlWebpackHarddiskPlugin(),
+    new CleanWebpackPlugin()
   ],
   devServer: {
     proxy: {
@@ -43,5 +60,8 @@ module.exports = {
     },
     host: '0.0.0.0',
     port: 5001
+  },
+  performance: {
+    hints: false
   }
 };

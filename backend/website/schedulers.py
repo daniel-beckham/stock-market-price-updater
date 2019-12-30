@@ -5,7 +5,7 @@ from flask_apscheduler import APScheduler
 from os import getenv
 from pytz import timezone
 
-from package.models import db, StockData, StockInfo, StockDataSchema
+from website.models import db, StockData, StockInfo, StockDataSchema
 
 class UpdateScheduler():
   
@@ -64,7 +64,7 @@ class UpdateScheduler():
       self.scheduler.add_job(id='main_job', func=self.update_all, trigger='cron', hour=17, minute=00, timezone='America/New_York')
 
       # Get the current time
-      current_time = datetime.now(timezone('America/New_York'))
+      current_time = datetime.now()
 
       # Start the update now if the current time is at least 5:00 PM EST but not yet 8:00 AM EST
       if (current_time.hour >= 17) or (current_time.hour < 8):

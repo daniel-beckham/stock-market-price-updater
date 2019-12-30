@@ -2,13 +2,13 @@ from flask import Flask, Blueprint
 from os import getenv
 from pathlib import Path
 
-from package.models import db, ma
-from package.routes import general, stock_data_api, stock_info_api
-from package.schedulers import UpdateScheduler
+from website.models import db, ma
+from website.routes import general, stock_data_api, stock_info_api
+from website.schedulers import UpdateScheduler
 
 def create_app():
   # Initialize Flask
-  app = Flask(__name__, template_folder='static')
+  app = Flask(__name__, static_url_path=getenv('SUBDIRECTORY', '') + '/static', template_folder='static')
   app.config.from_pyfile('config.py')
   app.url_map.strict_slashes = False
 
@@ -38,10 +38,12 @@ def create_app():
   db.init_app(app)
   ma.init_app(app)
 
+  blueprint_subdirectory = getenv('SUBDIRECTORY')
+
   # Register the blueprints
-  app.register_blueprint(general)
-  app.register_blueprint(stock_data_api)
-  app.register_blueprint(stock_info_api)
+  app.register_blueprint(general, url_prefix=blueprint_subdirectory)
+  app.register_blueprint(stock_data_api, url_prefix=blueprint_subdirectory)
+  app.register_blueprint(stock_info_api, url_prefix=blueprint_subdirectory)
 
   db.app = app
 

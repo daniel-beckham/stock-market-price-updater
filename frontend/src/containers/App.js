@@ -11,9 +11,19 @@ const App = () => (
     <div className="content">
       <Header />
       <Switch>
-        <Route exact path="/" component={LoadablePage('./HomePage')} />
-        <Route path="/prices" component={LoadablePage('./PricesPage')} />
-        <Route path="/stocks/:symbol" component={LoadablePage('./StockPage')} />
+        <Route
+          exact
+          path={`${process.env.SUBDIRECTORY}`}
+          component={LoadablePage('./HomePage')}
+        />
+        <Route
+          path={`${process.env.SUBDIRECTORY}/prices`}
+          component={LoadablePage('./PricesPage')}
+        />
+        <Route
+          path={`${process.env.SUBDIRECTORY}/stocks/:symbol`}
+          component={LoadablePage('./StockPage')}
+        />
         <Route component={LoadablePage('./NotFoundPage')} />
       </Switch>
     </div>

@@ -42,7 +42,7 @@ class StockPage extends React.Component {
   async fetchData() {
     const chartData = await getStockChartData(this.props.match.params.symbol);
     const latestStockData = await getJsonData(
-      '/stock-data/' + this.props.match.params.symbol + '/latest'
+      `${process.env.SUBDIRECTORY}/stock-data/${this.props.match.params.symbol}/latest`
     );
 
     this.setState({ chartData, latestStockData, isLoading: false });
@@ -58,7 +58,7 @@ class StockPage extends React.Component {
     if (isLoading) {
       return <Loader active />;
     } else if (chartData.length === 0 || latestStockData.length === 0) {
-      return <Redirect to="/" />;
+      return <Redirect to={`${process.env.SUBDIRECTORY}`} />;
     }
 
     return (
@@ -66,12 +66,15 @@ class StockPage extends React.Component {
         <Container className="main">
           {/* Breadcrumb */}
           <Breadcrumb>
-            <Breadcrumb.Section as={Link} to="/">
+            <Breadcrumb.Section as={Link} to={`${process.env.SUBDIRECTORY}`}>
               Home
             </Breadcrumb.Section>
             <Breadcrumb.Divider />
-            {prevPath.search('/prices') !== -1 ? (
-              <Breadcrumb.Section as={Link} to={'/prices'}>
+            {prevPath.search(`${process.env.SUBDIRECTORY}/prices`) !== -1 ? (
+              <Breadcrumb.Section
+                as={Link}
+                to={`${process.env.SUBDIRECTORY}/prices`}
+              >
                 Latest Prices
               </Breadcrumb.Section>
             ) : (
