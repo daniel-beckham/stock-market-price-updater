@@ -1,9 +1,9 @@
 # Stock Market Price Updater
 ### [Live Demo](https://danielbeckham.com/stock-market-price-updater)
 
-This is a web app that retrieves daily stock prices and also allows two years of historical data to be viewed for each stock. It is powered by Flask and React and uses the [Alpha Vantage](https://www.alphavantage.co/) API to store the stock prices in a PostgreSQL database.
+This is a single-page application that retrieves daily stock prices and also allows two years of historical data to be viewed for each stock. It is powered by Flask and React and uses the [Alpha Vantage](https://www.alphavantage.co/) API to store the stock prices in a PostgreSQL database.
 
-The app is separated into two components: the front end (Flask) and the back end (React). It has been configured primarily for use with Docker Compose, but it can also be started manually. Some instructions for deploying it on both Google App Engine and AWS Elastic Beanstalk have been provided as well.
+The app has been configured primarily for use with Docker Compose, but it can also be set up manually. Some instructions for deploying it on both Google App Engine and AWS Elastic Beanstalk have been provided as well.
 
 ## Docker Compose Instructions
 * Provide the required information in the `.env` file.
