@@ -54,7 +54,7 @@ export default class HomePage extends React.Component {
             <Grid.Row>
               <Grid.Column align="center">
                 <Image
-                  src={`${process.env.SUBDIRECTORY}/static/img/analytics-1.svg`}
+                  src={`${process.env.SUBDIRECTORY}/static/img/chart-1.svg`}
                   size="large"
                 />
               </Grid.Column>
@@ -91,7 +91,7 @@ export default class HomePage extends React.Component {
               </Grid.Column>
               <Grid.Column align="center">
                 <Image
-                  src={`${process.env.SUBDIRECTORY}/static/img/analytics-2.svg`}
+                  src={`${process.env.SUBDIRECTORY}/static/img/chart-2.svg`}
                   size="large"
                 />
               </Grid.Column>
