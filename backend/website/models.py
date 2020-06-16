@@ -17,7 +17,7 @@ class StockData(db.Model):
   volume = db.Column('volume', db.BigInteger)
 
 # Stock data schema
-class StockDataSchema(ma.ModelSchema):
+class StockDataSchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model = StockData
 
@@ -28,6 +28,6 @@ class StockInfo(db.Model):
   name = db.Column('name', db.String)
 
 # Stock info schema
-class StockInfoSchema(ma.ModelSchema):
+class StockInfoSchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model = StockInfo

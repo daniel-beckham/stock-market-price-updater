@@ -8,43 +8,6 @@ from pytz import timezone
 from website.models import db, StockData, StockInfo, StockDataSchema
 
 class UpdateScheduler():
-  
-  max_days_per_stock = 730
-  update_interval = 20
-
-  stocks = [
-    ('AAPL', 'Apple Inc.'),
-    ('AXP', 'American Express Company'),
-    ('BA', 'The Boeing Company'),
-    ('CAT', 'Caterpillar Inc.'),
-    ('CSCO', 'Cisco Systems, Inc.'),
-    ('CVX', 'Chevron Corporation'),
-    ('DIS', 'The Walt Disney Company'),
-    ('DOW', 'Dow Inc.'),
-    ('GS', 'The Goldman Sachs Group, Inc.'),
-    ('HD', 'The Home Depot, Inc.'),
-    ('IBM', 'International Business Machines Corporation'),
-    ('INTC', 'Intel Corporation'),
-    ('JNJ', 'Johnson & Johnson'),
-    ('JPM', 'JPMorgan Chase & Co.'),
-    ('KO', 'The Coca-Cola Company'),
-    ('MCD', 'McDonald\'s Corporation'),
-    ('MMM', '3M Company'),
-    ('MRK', 'Merck & Co., Inc.'),
-    ('MSFT', 'Microsoft Corporation'),
-    ('NKE', 'NIKE, Inc.'),
-    ('PFE', 'Pfizer Inc.'),
-    ('PG', 'The Procter & Gamble Company'),
-    ('RTX', 'Raytheon Technologies Corporation'),
-    ('TRV', 'The Travelers Companies, Inc.'),
-    ('UNH', 'UnitedHealth Group Incorporated'),
-    ('V', 'Visa Inc.'),
-    ('VZ', 'Verizon Communications Inc.'),
-    ('WBA', 'Walgreens Boots Alliance, Inc.'),
-    ('WMT', 'Walmart Inc.'),
-    ('XOM', 'Exxon Mobil Corporation')
-  ]
-
   scheduler = APScheduler()
   ts = None
 
@@ -79,15 +42,15 @@ class UpdateScheduler():
 
       # Populate the stock info table
       if not db.session.query(StockInfo).first():
-        for stock in self.stocks:
+        for stock in db.app.config['STOCK_INFO']:
           if not StockInfo.query.filter(StockInfo.symbol == stock[0]).first():
             db.session.add(StockInfo(symbol=stock[0], name=stock[1]))
             db.session.commit()
 
   def update_all(self):
     # Update all of the stocks in set intervals
-    for index, stock in enumerate(self.stocks, start=1):
-      next_update_time = datetime.now() + timedelta(seconds=self.update_interval * index)
+    for index, stock in enumerate(db.app.config['STOCK_INFO'], start=1):
+      next_update_time = datetime.now() + timedelta(seconds=db.app.config['STOCK_UPDATE_INTERVAL_IN_SECONDS'] * index)
       self.scheduler.add_job(id=stock[0] + '_job', func=self.update_stock, trigger='date', args=[stock], run_date=next_update_time)
 
   def update_stock(self, stock):
@@ -95,11 +58,11 @@ class UpdateScheduler():
 
       # Get the stock data from Alpha Vantage and sort it by date
       alpha_vantage_data = OrderedDict(sorted(self.ts.get_daily(stock[0], outputsize='full')[0].items(), reverse=True))
-      oldest_date = (datetime.now() - timedelta(days=self.max_days_per_stock)).strftime('%Y-%m-%d')
+      oldest_date = (datetime.now() - timedelta(days=db.app.config['STOCK_MAX_NUMBER_OF_DAYS'])).strftime('%Y-%m-%d')
       stock_data = []
 
       # Add the stock data for each day (up to a maximum number of days)
-      for item in list(alpha_vantage_data.items())[:self.max_days_per_stock]:
+      for item in list(alpha_vantage_data.items())[:db.app.config['STOCK_MAX_NUMBER_OF_DAYS']]:
         if item[0] >= oldest_date and not StockData.query.filter(StockData.symbol == stock[0], StockData.date == item[0]).first():
           stock_data.append(StockData(
             date=item[0],
