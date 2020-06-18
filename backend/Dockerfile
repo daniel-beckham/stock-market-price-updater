@@ -1,5 +1,11 @@
 FROM python:3.8-slim
 
+# Set the build-time variables
+ARG SUBDIRECTORY
+
+# Set the environment variables
+ENV SUBDIRECTORY $SUBDIRECTORY
+
 # Change the working directory
 WORKDIR /app/backend
 

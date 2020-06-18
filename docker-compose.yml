@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: ./backend/Dockerfile
+      args:
+        - SUBDIRECTORY=${SUBDIRECTORY}
     command: gunicorn --bind 0.0.0.0:5000 main:app
     depends_on:
       - db_dependency
