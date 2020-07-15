@@ -153,7 +153,7 @@ class StockPage extends React.Component {
                 ) : latestStockData.change > 0 ? (
                   <Icon color="green" name="long arrow alternate up" />
                 ) : (
-                  ''
+                  <Icon color="grey" name="minus" />
                 )}
               </span>
             </p>

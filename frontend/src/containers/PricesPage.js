@@ -206,7 +206,7 @@ export default class PricesPage extends React.Component {
                   ) : data.change > 0 ? (
                     <Icon color="green" name="long arrow alternate up" />
                   ) : (
-                    ''
+                    <Icon color="grey" name="minus" />
                   )}
                 </Table.Cell>
 
