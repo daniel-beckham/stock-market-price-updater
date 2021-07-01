@@ -109,7 +109,9 @@ def stock_data_all_latest():
       else:
         pair[0]['percent_change'] = 0.0
 
-      pair[0]['name'] = stock_info[object['symbol']]
+      # Get the name of the stock from the symbol
+      name = stock_info[object['symbol']] if object['symbol'] in stock_info else object['symbol']
+      pair[0]['name'] = name
 
       # Only include the latest day in the output
       final_output.append(pair[0])
