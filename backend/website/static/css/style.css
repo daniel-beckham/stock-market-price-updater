@@ -8,14 +8,18 @@
   flex: 1 0 auto;
 }
 
-.ui.container.main {
-  padding-top: 3em;
-}
-
 .ui.container.footer {
   padding-bottom: 1em;
   padding-top: 1em;
   text-align: center;
+}
+
+.ui.container.main {
+  padding-top: 3em;
+}
+
+.ui.container.overflow {
+  overflow-x: auto;
 }
 
 .ui.grid > .column:not(.row).menu {
@@ -40,6 +44,10 @@
 .ui.menu.main {
   padding-bottom: 0.5em;
   padding-top: 0.5em;
+}
+
+.ui.selectable.table tbody tr:hover {
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

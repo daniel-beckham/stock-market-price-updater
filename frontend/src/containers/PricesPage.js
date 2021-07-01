@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
   Breadcrumb,
   Container,
@@ -12,7 +12,7 @@ import {
 import _ from 'lodash';
 import getJsonData from '../utils/getJsonData';
 
-export default class PricesPage extends React.Component {
+class PricesPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -74,7 +74,7 @@ export default class PricesPage extends React.Component {
     }
 
     return (
-      <Container className="main" style={{ overflowX: 'auto' }}>
+      <Container className="main overflow">
         {/* Breadcrumb */}
         <Breadcrumb>
           <Breadcrumb.Section as={Link} to={`${process.env.SUBDIRECTORY}`}>
@@ -87,7 +87,7 @@ export default class PricesPage extends React.Component {
         <Divider hidden />
 
         {/* Stock data table */}
-        <Table sortable striped unstackable>
+        <Table selectable sortable striped unstackable>
           {/* Header */}
           <Table.Header>
             <Table.Row>
@@ -153,7 +153,15 @@ export default class PricesPage extends React.Component {
           {/* Body */}
           <Table.Body>
             {Object.values(stockData).map(data => (
-              <Table.Row key={data.symbol}>
+              <Table.Row
+                onClick={() => {
+                  this.props.history.push({
+                    pathname: `${process.env.SUBDIRECTORY}/stocks/${data.symbol}`,
+                    state: { prevPath: this.props.location.pathname }
+                  });
+                }}
+                key={data.symbol}
+              >
                 {/* Symbol */}
                 <Table.Cell key={data.symbol}>
                   <Link
@@ -161,6 +169,7 @@ export default class PricesPage extends React.Component {
                       pathname: `${process.env.SUBDIRECTORY}/stocks/${data.symbol}`,
                       state: { prevPath: this.props.location.pathname }
                     }}
+                    title={data.name}
                   >
                     {data.symbol}
                   </Link>
@@ -247,3 +256,5 @@ export default class PricesPage extends React.Component {
     );
   }
 }
+
+export default withRouter(props => <PricesPage {...props} />);

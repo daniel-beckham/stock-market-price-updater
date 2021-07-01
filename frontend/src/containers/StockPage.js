@@ -1,6 +1,5 @@
 import React from 'react';
-import { Redirect, withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import {
   Breadcrumb,
   Container,
