@@ -3,7 +3,7 @@
 
 This is a single-page application that retrieves daily stock prices and also allows two years of historical data to be viewed for each stock.
 
-The back end is powered by [Flask](https://palletsprojects.com/p/flask/) and uses the [Alpha Vantage](https://www.alphavantage.co/) API to store the stock prices in a PostgreSQL database. The front end is built with [React](https://reactjs.org/) and a number of other supporting JavaScript libraries.
+The back end is powered by [Flask](https://palletsprojects.com/p/flask/) and uses the [Alpha Vantage](https://www.alphavantage.co/) API to store the stock prices in a PostgreSQL database. The front end is built with [React](https://reactjs.org/) and a number of other supporting JavaScript libraries, including [Webpack](https://webpack.js.org/) and [Babel](https://babeljs.io/).
 
 The app has been configured primarily for use with Docker Compose, but it can also be set up manually. Instructions for deploying it on both Google App Engine and AWS Elastic Beanstalk have been provided as well.
 
