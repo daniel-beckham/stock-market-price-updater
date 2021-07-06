@@ -165,6 +165,9 @@ class PricesPage extends React.Component {
                 {/* Symbol */}
                 <Table.Cell key={data.symbol}>
                   <Link
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
                     to={{
                       pathname: `${process.env.SUBDIRECTORY}/stocks/${data.symbol}`,
                       state: { prevPath: this.props.location.pathname }
