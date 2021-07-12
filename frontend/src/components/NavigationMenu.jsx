@@ -1,18 +1,19 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+
 import { Menu } from 'semantic-ui-react';
 
 class NavigationMenu extends React.Component {
   componentDidMount() {
     $('.ui.search').search({
       apiSettings: {
-        url: `${process.env.SUBDIRECTORY}/stock-info/filter?q={query}`
+        url: `${process.env.SUBDIRECTORY}/api/info/filter?q={query}`,
       },
       onSelect: (result, response) => {
         this.props.history.push(
-          `${process.env.SUBDIRECTORY}/stocks/${result.title}`
+          `${process.env.SUBDIRECTORY}/stock/${result.title}`
         );
-      }
+      },
     });
   }
 

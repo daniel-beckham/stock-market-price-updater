@@ -1,5 +1,8 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+
+import _ from 'lodash';
+
 import {
   Breadcrumb,
   Container,
@@ -7,9 +10,9 @@ import {
   Header,
   Icon,
   Loader,
-  Table
+  Table,
 } from 'semantic-ui-react';
-import _ from 'lodash';
+
 import getJsonData from '../utils/getJsonData';
 
 class PricesPage extends React.Component {
@@ -20,7 +23,7 @@ class PricesPage extends React.Component {
       sortColumn: 'symbol',
       sortDirection: 'ascending',
       stockData: [],
-      isLoading: true
+      isLoading: true,
     };
   }
 
@@ -31,23 +34,23 @@ class PricesPage extends React.Component {
 
   async fetchData() {
     const stockData = await getJsonData(
-      `${process.env.SUBDIRECTORY}/stock-data/all/latest`
+      `${process.env.SUBDIRECTORY}/api/data/stocks/latest`
     );
 
     this.setState({
       stockData: _.sortBy(stockData, [this.state.sortColumn]),
-      isLoading: false
+      isLoading: false,
     });
   }
 
-  handleSort = clickedColumn => () => {
+  handleSort = (clickedColumn) => () => {
     const { sortColumn, sortDirection, stockData } = this.state;
 
     if (sortColumn !== clickedColumn) {
       this.setState({
         sortColumn: clickedColumn,
         stockData: _.sortBy(stockData, [clickedColumn]),
-        sortDirection: 'ascending'
+        sortDirection: 'ascending',
       });
 
       return;
@@ -55,7 +58,7 @@ class PricesPage extends React.Component {
 
     this.setState({
       stockData: stockData.reverse(),
-      sortDirection: sortDirection === 'ascending' ? 'descending' : 'ascending'
+      sortDirection: sortDirection === 'ascending' ? 'descending' : 'ascending',
     });
   };
 
@@ -152,12 +155,12 @@ class PricesPage extends React.Component {
           </Table.Header>
           {/* Body */}
           <Table.Body>
-            {Object.values(stockData).map(data => (
+            {Object.values(stockData).map((data) => (
               <Table.Row
                 onClick={() => {
                   this.props.history.push({
-                    pathname: `${process.env.SUBDIRECTORY}/stocks/${data.symbol}`,
-                    state: { prevPath: this.props.location.pathname }
+                    pathname: `${process.env.SUBDIRECTORY}/stock/${data.symbol}`,
+                    state: { prevPath: this.props.location.pathname },
                   });
                 }}
                 key={data.symbol}
@@ -169,8 +172,8 @@ class PricesPage extends React.Component {
                       e.preventDefault();
                     }}
                     to={{
-                      pathname: `${process.env.SUBDIRECTORY}/stocks/${data.symbol}`,
-                      state: { prevPath: this.props.location.pathname }
+                      pathname: `${process.env.SUBDIRECTORY}/stock/${data.symbol}`,
+                      state: { prevPath: this.props.location.pathname },
                     }}
                     title={data.name}
                   >
@@ -188,7 +191,7 @@ class PricesPage extends React.Component {
                 >
                   {data.close.toLocaleString(undefined, {
                     maximumFractionDigits: 2,
-                    minimumFractionDigits: 2
+                    minimumFractionDigits: 2,
                   })}
                 </Table.Cell>
 
@@ -208,7 +211,7 @@ class PricesPage extends React.Component {
                   >
                     {data.change.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
-                      minimumFractionDigits: 2
+                      minimumFractionDigits: 2,
                     })}
                   </font>
 
@@ -238,7 +241,7 @@ class PricesPage extends React.Component {
                   >
                     {data.percent_change.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
-                      minimumFractionDigits: 2
+                      minimumFractionDigits: 2,
                     })}
                     %
                   </font>
@@ -260,4 +263,4 @@ class PricesPage extends React.Component {
   }
 }
 
-export default withRouter(props => <PricesPage {...props} />);
+export default withRouter((props) => <PricesPage {...props} />);

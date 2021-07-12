@@ -1,13 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Accordion,
-  Button,
-  Container,
-  Icon,
-  Grid,
-  Menu
-} from 'semantic-ui-react';
+
+import { Accordion, Button, Icon, Grid, Menu } from 'semantic-ui-react';
+
 import NavigationMenu from './NavigationMenu';
 
 export default class SiteHeader extends React.Component {

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import {
   Button,
   Container,
   Divider,
   Header,
   Grid,
-  Image
+  Image,
 } from 'semantic-ui-react';
 
 export default class HomePage extends React.Component {

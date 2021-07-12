@@ -1,41 +1,41 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
 
 import { format } from 'd3-format';
 import { timeFormat } from 'd3-time-format';
 
 import { Chart, ChartCanvas } from 'react-stockcharts';
-import {
-  AreaSeries,
-  BarSeries,
-  LineSeries
-} from 'react-stockcharts/lib/series';
 import { XAxis, YAxis } from 'react-stockcharts/lib/axes';
 import {
   CrossHairCursor,
   CurrentCoordinate,
   EdgeIndicator,
   MouseCoordinateX,
-  MouseCoordinateY
+  MouseCoordinateY,
 } from 'react-stockcharts/lib/coordinates';
-
+import { fitWidth } from 'react-stockcharts/lib/helper';
+import { ema, sma } from 'react-stockcharts/lib/indicator';
 import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale';
 import {
+  AreaSeries,
+  BarSeries,
+  LineSeries,
+} from 'react-stockcharts/lib/series';
+import {
   OHLCTooltip,
-  MovingAverageTooltip
+  MovingAverageTooltip,
 } from 'react-stockcharts/lib/tooltip';
-import { ema, sma } from 'react-stockcharts/lib/indicator';
-import { fitWidth } from 'react-stockcharts/lib/helper';
 import {
   createVerticalLinearGradient,
   hexToRGBA,
-  last
+  last,
 } from 'react-stockcharts/lib/utils';
 
 const canvasGradient = createVerticalLinearGradient([
   { stop: 0, color: hexToRGBA('#b5d0ff', 0.2) },
   { stop: 0.5, color: hexToRGBA('#6fa4fc', 0.4) },
-  { stop: 1, color: hexToRGBA('#4286f4', 0.8) }
+  { stop: 1, color: hexToRGBA('#4286f4', 0.8) },
 ]);
 
 class StockChart extends React.Component {
@@ -46,7 +46,7 @@ class StockChart extends React.Component {
       .merge((d, c) => {
         d.sma50 = c;
       })
-      .accessor(d => d.sma50);
+      .accessor((d) => d.sma50);
 
     const ema50 = ema()
       .options({ windowSize: 50 })
@@ -54,17 +54,16 @@ class StockChart extends React.Component {
       .merge((d, c) => {
         d.ema50 = c;
       })
-      .accessor(d => d.ema50);
+      .accessor((d) => d.ema50);
 
     const { type, data: initialData, width, ratio } = this.props;
 
     const calculatedData = sma50(ema50(initialData));
     const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(
-      d => d.date
+      (d) => d.date
     );
-    const { data, xScale, xAccessor, displayXAccessor } = xScaleProvider(
-      calculatedData
-    );
+    const { data, xScale, xAccessor, displayXAccessor } =
+      xScaleProvider(calculatedData);
 
     const start = xAccessor(last(data));
     const end = xAccessor(data[Math.max(0, data.length - 150)]);
@@ -86,7 +85,11 @@ class StockChart extends React.Component {
       >
         <Chart
           id={1}
-          yExtents={[d => [d.high, d.low], sma50.accessor(), ema50.accessor()]}
+          yExtents={[
+            (d) => [d.high, d.low],
+            sma50.accessor(),
+            ema50.accessor(),
+          ]}
         >
           <XAxis axisAt="bottom" orient="bottom" ticks={width / 100} />
           <YAxis axisAt="right" orient="right" ticks={5} />
@@ -98,12 +101,12 @@ class StockChart extends React.Component {
           />
 
           <AreaSeries
-            yAccessor={d => d.close}
+            yAccessor={(d) => d.close}
             strokeWidth={2}
             canvasGradient={canvasGradient}
           />
 
-          <CurrentCoordinate yAccessor={d => d.close} fill={'#1f77b4'} />
+          <CurrentCoordinate yAccessor={(d) => d.close} fill={'#1f77b4'} />
 
           <LineSeries
             yAccessor={sma50.accessor()}
@@ -120,8 +123,8 @@ class StockChart extends React.Component {
             itemType="last"
             orient="right"
             edgeAt="right"
-            yAccessor={d => d.close}
-            fill={d => (d.close > d.open ? '#6ba583' : '#ff0000')}
+            yAccessor={(d) => d.close}
+            fill={(d) => (d.close > d.open ? '#6ba583' : '#ff0000')}
           />
 
           <OHLCTooltip origin={[-40, 0]} />
@@ -132,20 +135,20 @@ class StockChart extends React.Component {
                 yAccessor: sma50.accessor(),
                 type: 'SMA',
                 stroke: sma50.stroke(),
-                windowSize: sma50.options().windowSize
+                windowSize: sma50.options().windowSize,
               },
               {
                 yAccessor: ema50.accessor(),
                 type: 'EMA',
                 stroke: ema50.stroke(),
-                windowSize: ema50.options().windowSize
-              }
+                windowSize: ema50.options().windowSize,
+              },
             ]}
           />
         </Chart>
         <Chart
           id={2}
-          yExtents={[d => d.volume]}
+          yExtents={[(d) => d.volume]}
           height={150}
           origin={(w, h) => [0, h - 150]}
         >
@@ -168,15 +171,15 @@ class StockChart extends React.Component {
           />
 
           <BarSeries
-            yAccessor={d => d.volume}
-            fill={d => (d.close > d.open ? '#6ba583' : '#ff0000')}
+            yAccessor={(d) => d.volume}
+            fill={(d) => (d.close > d.open ? '#6ba583' : '#ff0000')}
           />
 
           <EdgeIndicator
             itemType="last"
             orient="right"
             edgeAt="right"
-            yAccessor={d => d.volume}
+            yAccessor={(d) => d.volume}
             fill="#0f0f0f"
             displayFormat={format('.2s')}
           />
@@ -191,11 +194,11 @@ StockChart.propTypes = {
   data: PropTypes.array.isRequired,
   width: PropTypes.number.isRequired,
   ratio: PropTypes.number.isRequired,
-  type: PropTypes.oneOf(['svg', 'hybrid']).isRequired
+  type: PropTypes.oneOf(['svg', 'hybrid']).isRequired,
 };
 
 StockChart.defaultProps = {
-  type: 'hybrid'
+  type: 'hybrid',
 };
 StockChart = fitWidth(StockChart);
 

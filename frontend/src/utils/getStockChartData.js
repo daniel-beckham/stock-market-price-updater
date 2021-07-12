@@ -1,12 +1,15 @@
 import { timeParse } from 'd3-time-format';
+
 import getJsonData from './getJsonData';
 
 export default function getStockChartData(symbol) {
-  const result = getJsonData(`${process.env.SUBDIRECTORY}/stock-data/${symbol}`)
-    .then(response => {
+  const result = getJsonData(
+    `${process.env.SUBDIRECTORY}/api/data/stock/${symbol}`
+  )
+    .then((response) => {
       let chartArray = [];
 
-      response.data.forEach(responseObject => {
+      response.data.forEach((responseObject) => {
         let chartObject = {};
 
         chartObject.date = timeParse('%Y-%m-%d')(responseObject.date);
@@ -20,7 +23,7 @@ export default function getStockChartData(symbol) {
 
       return chartArray.reverse();
     })
-    .catch(error => {
+    .catch((error) => {
       return [];
     });
 

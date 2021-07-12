@@ -1,14 +1,17 @@
 import React from 'react';
 import { Link, Redirect, withRouter } from 'react-router-dom';
+
 import {
   Breadcrumb,
   Container,
   Divider,
   Loader,
   Header,
-  Icon
+  Icon,
 } from 'semantic-ui-react';
-import Chart from '../components/StockChart';
+
+import StockChart from '../components/StockChart';
+
 import getStockChartData from '../utils/getStockChartData';
 import getJsonData from '../utils/getJsonData';
 
@@ -19,7 +22,7 @@ class StockPage extends React.Component {
     this.initialState = {
       chartData: [],
       latestStockData: {},
-      isLoading: true
+      isLoading: true,
     };
 
     this.state = this.initialState;
@@ -41,7 +44,7 @@ class StockPage extends React.Component {
   async fetchData() {
     const chartData = await getStockChartData(this.props.match.params.symbol);
     const latestStockData = await getJsonData(
-      `${process.env.SUBDIRECTORY}/stock-data/${this.props.match.params.symbol}/latest`
+      `${process.env.SUBDIRECTORY}/api/data/stock/${this.props.match.params.symbol}/latest`
     );
 
     this.setState({ chartData, latestStockData, isLoading: false });
@@ -106,7 +109,7 @@ class StockPage extends React.Component {
                 <strong>
                   {latestStockData.close.toLocaleString(undefined, {
                     maximumFractionDigits: 2,
-                    minimumFractionDigits: 2
+                    minimumFractionDigits: 2,
                   })}
                 </strong>
                 &nbsp;
@@ -125,7 +128,7 @@ class StockPage extends React.Component {
                 >
                   {latestStockData.change.toLocaleString(undefined, {
                     maximumFractionDigits: 2,
-                    minimumFractionDigits: 2
+                    minimumFractionDigits: 2,
                   })}
                 </font>
                 &nbsp;
@@ -142,7 +145,7 @@ class StockPage extends React.Component {
                   (
                   {latestStockData.percent_change.toLocaleString(undefined, {
                     maximumFractionDigits: 2,
-                    minimumFractionDigits: 2
+                    minimumFractionDigits: 2,
                   })}
                   %)&nbsp;
                 </font>
@@ -168,9 +171,9 @@ class StockPage extends React.Component {
 
           <Divider hidden />
 
-          {/* Chart */}
+          {/* Stock chart */}
           <Container>
-            <Chart data={chartData} />
+            <StockChart data={chartData} />
           </Container>
         </Container>
       </React.Fragment>
@@ -178,4 +181,4 @@ class StockPage extends React.Component {
   }
 }
 
-export default withRouter(props => <StockPage {...props} />);
+export default withRouter((props) => <StockPage {...props} />);

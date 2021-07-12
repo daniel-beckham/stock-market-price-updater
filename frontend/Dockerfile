@@ -13,7 +13,7 @@ WORKDIR /app/frontend
 COPY ./frontend/package.json /app/frontend
 
 # Install the dependencies
-RUN npm install --silent
+RUN npm install --legacy-peer-deps --silent
 
 # Copy the remaining files
 COPY ./backend/website/static /app/backend/website/static
