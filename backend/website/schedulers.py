@@ -56,21 +56,27 @@ class UpdateScheduler:
                         db.session.commit()
 
     def update_all(self):
-        # Update all of the stocks in set intervals
-        for index, stock in enumerate(db.app.config["STOCK_INFO"], start=1):
-            next_update_time = datetime.now() + timedelta(
-                seconds=db.app.config["STOCK_UPDATE_INTERVAL_IN_SECONDS"] * index
-            )
-            self.scheduler.add_job(
-                id=stock[0] + "_job",
-                func=self.update_stock,
-                trigger="date",
-                args=[stock],
-                run_date=next_update_time,
-            )
+        with db.app.app_context():
+            # Get the update interval for all of the stocks
+            update_interval = db.app.config["STOCK_UPDATE_INTERVAL_IN_SECONDS"]
+
+            # Update all of the stocks in set intervals
+            for index, stock in enumerate(db.app.config["STOCK_INFO"], start=1):
+                next_update_time = datetime.now() + timedelta(
+                    seconds=update_interval * index
+                )
+                self.scheduler.add_job(
+                    id=stock[0] + "_job",
+                    func=self.update_stock,
+                    trigger="date",
+                    args=[stock],
+                    run_date=next_update_time,
+                )
 
     def update_stock(self, stock):
         with db.app.app_context():
+            # Get the maximum number of days of stock data
+            max_days = db.app.config["STOCK_MAX_NUMBER_OF_DAYS"]
 
             # Get the stock data from Alpha Vantage and sort it by date
             alpha_vantage_data = OrderedDict(
@@ -79,18 +85,18 @@ class UpdateScheduler:
                     reverse=True,
                 )
             )
-            oldest_date = (
-                datetime.now()
-                - timedelta(days=db.app.config["STOCK_MAX_NUMBER_OF_DAYS"])
-            ).strftime("%Y-%m-%d")
+
+            # Get the beginning date of the stock data
+            first_date = (datetime.now() - timedelta(days=max_days)).strftime(
+                "%Y-%m-%d"
+            )
+
             stock_data = []
 
-            # Add the stock data for each day (up to a maximum number of days)
-            for item in list(alpha_vantage_data.items())[
-                : db.app.config["STOCK_MAX_NUMBER_OF_DAYS"]
-            ]:
+            # Add the stock data for each day (up to the maximum number of days)
+            for item in list(alpha_vantage_data.items())[:max_days]:
                 if (
-                    item[0] >= oldest_date
+                    item[0] >= first_date
                     and not StockData.query.filter(
                         StockData.symbol == stock[0], StockData.date == item[0]
                     ).first()
@@ -113,5 +119,5 @@ class UpdateScheduler:
                 db.session.commit()
 
             # Delete the old stock data
-            db.session.query(StockData).filter(StockData.date < oldest_date).delete()
+            db.session.query(StockData).filter(StockData.date < first_date).delete()
             db.session.commit()
