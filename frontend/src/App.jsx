@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import loadable from '@loadable/component';
 
@@ -27,7 +27,9 @@ const App = () => (
           component={LoadablePage('./pages/StockPage')}
         />
         {/* Not found */}
-        <Route component={LoadablePage('./pages/HomePage')} />
+        <Route>
+          <Redirect to={`${process.env.SUBDIRECTORY}`} />
+        </Route>
       </Switch>
     </div>
     <Footer />
