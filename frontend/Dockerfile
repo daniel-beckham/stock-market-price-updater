@@ -1,4 +1,4 @@
-FROM node:13-alpine as base
+FROM node:16-alpine as base
 
 # Set the build-time variables
 ARG SUBDIRECTORY

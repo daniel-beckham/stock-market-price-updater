@@ -1,7 +1,7 @@
 # Stock Market Price Updater
 ### [Live Demo](https://danielbeckham.com/stock-market-price-updater)
 
-This is a single-page application that retrieves daily stock prices and also allows two years of historical data to be viewed for each stock.
+This is a web app that retrieves daily stock prices and also allows two years of historical data to be viewed for each stock.
 
 The back end is powered by [Flask](https://palletsprojects.com/p/flask/) and uses the [Alpha Vantage](https://www.alphavantage.co/) API to store the stock prices in a PostgreSQL database. The front end is built with [React](https://reactjs.org/) and a number of other supporting JavaScript libraries, including [Webpack](https://webpack.js.org/) and [Babel](https://babeljs.io/).
 
