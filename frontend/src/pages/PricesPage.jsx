@@ -28,7 +28,7 @@ class PricesPage extends React.Component {
   }
 
   async componentDidMount() {
-    document.title = 'Latest Prices';
+    document.title = 'Latest Prices - Stock Market Price Updater';
     await this.fetchData();
   }
 

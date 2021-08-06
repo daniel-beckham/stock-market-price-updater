@@ -30,14 +30,16 @@ class StockPage extends React.Component {
 
   async componentDidUpdate(prevProps) {
     if (this.props.location.pathname !== prevProps.location.pathname) {
-      document.title = this.props.match.params.symbol;
+      document.title =
+        this.props.match.params.symbol + ' - Stock Market Price Updater';
       this.setState(this.initialState);
       await this.fetchData();
     }
   }
 
   async componentDidMount() {
-    document.title = this.props.match.params.symbol;
+    document.title =
+      this.props.match.params.symbol + ' - Stock Market Price Updater';
     await this.fetchData();
   }
 
